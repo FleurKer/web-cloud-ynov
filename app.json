@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ed8f19d9-c02b-4ce1-a455-cdf69938ec78"
+      }
+    },
+    "owner": "fleurynov"
   }
 }
