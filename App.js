@@ -5,10 +5,14 @@ import { signin } from "./auth_signin_password";
 import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-root-toast";
 import { signinWithGithub } from "./auth_github_signin_popup";
+import { loginWithPhoneNumber } from "./auth_phone_signin";
+import { verifyCode } from "./auth_phone_verify_code";
 
 export default function App() {
   const [email, onChangeEmail] = React.useState("");
   const [password, onChangePassword] = React.useState("");
+  const [phoneNumber, setPhoneNumber] = React.useState("");
+  const [code, setCode] = React.useState("");
 
   //Regex for email validation
   const emailRegex = /\S+@\S+\.\S+/;
@@ -67,6 +71,18 @@ export default function App() {
           value={password}
           secureTextEntry={true}
         ></TextInput>
+        <Text>Phone number</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(input) => setPhoneNumber(input)}
+          value={phoneNumber}
+        ></TextInput>
+        <Text>code phone number</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(input) => setCode(input)}
+          value={code}
+        ></TextInput>
         <Button
           title="Sign up"
           onPress={() => handleSignup(email, password)}
@@ -79,6 +95,15 @@ export default function App() {
           title="connect with github"
           onPress={() => signinWithGithub()}
         ></Button>
+        <Button
+          title="Connect by phone number"
+          onPress={() => loginWithPhoneNumber(phoneNumber)}
+        ></Button>
+        <Button
+          title="Code for phone"
+          onPress={() => verifyCode(code)}
+        ></Button>
+        <div id="recaptcha-container"></div>
       </View>
     </RootSiblingParent>
   );
