@@ -6,6 +6,7 @@ export const verifyCode = async (code) => {
       const user = result.user;
       console.log("User signed in successfully");
       console.log(user);
+      // router.replace("/profile");
       return true;
     })
     .catch((error) => {

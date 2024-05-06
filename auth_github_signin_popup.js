@@ -1,6 +1,8 @@
 import { getAuth, signInWithPopup, GithubAuthProvider } from "firebase/auth";
 import { provider } from "./auth_github_provider_create";
+import "./firebaseConfig";
 
+//utilise le app par défault de firebase
 const auth = getAuth();
 export const signinWithGithub = () => {
   signInWithPopup(auth, provider)

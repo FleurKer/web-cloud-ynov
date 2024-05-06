@@ -9,6 +9,7 @@ const auth = getAuth();
 console.log(auth);
 
 export const loginWithPhoneNumber = async (phoneNumber) => {
+  //   if (window !== undefined) {
   window.recaptchaVerifier = new RecaptchaVerifier(
     auth,
     "recaptcha-container",
@@ -26,19 +27,39 @@ export const loginWithPhoneNumber = async (phoneNumber) => {
       },
     }
   );
-  const appVerifier = window.recaptchaVerifier;
-  signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-    .then((confirmationResult) => {
-      // SMS sent. Prompt user to type the code from the message, then sign the
-      // user in with confirmationResult.confirm(code).
-      window.confirmationResult = confirmationResult;
-      console.log(confirmationResult);
-      return confirmationResult;
-    })
-    .catch((error) => {
-      // Error; SMS not sent
-      // ...
-      console.log("sms not sent");
-      console.log(error);
-    });
+
+  try {
+    const appVerifier = window.recaptchaVerifier;
+    const confirmationResult = await signInWithPhoneNumber(
+      auth,
+      phoneNumber,
+      appVerifier
+    );
+    // SMS sent. Prompt user to type the code from the message, then sign the
+    // user in with confirmationResult.confirm(code).
+    window.confirmationResult = confirmationResult;
+    console.log(confirmationResult);
+    return confirmationResult;
+  } catch (error) {
+    // Error; SMS not sent
+    // ...
+    console.log("sms not sent");
+    console.log(error);
+  }
+  // const appVerifier = window.recaptchaVerifier;
+  // signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+  //   .then((confirmationResult) => {
+  //     // SMS sent. Prompt user to type the code from the message, then sign the
+  //     // user in with confirmationResult.confirm(code).
+  //     window.confirmationResult = confirmationResult;
+  //     console.log(confirmationResult);
+  //     return confirmationResult;
+  //   })
+  //   .catch((error) => {
+  //     // Error; SMS not sent
+  //     // ...
+  //     console.log("sms not sent");
+  //     console.log(error);
+  //   });
+  //   }
 };

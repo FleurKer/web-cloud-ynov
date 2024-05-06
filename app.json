@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "web-cloud-ynov",
     "name": "web-cloud-ynov",
     "slug": "web-cloud-ynov",
     "version": "1.0.0",
@@ -25,6 +26,8 @@
       "package": "com.fleurynov.webcloudynov"
     },
     "web": {
+      "bundler": "metro",
+      "output": "static",
       "favicon": "./assets/favicon.png"
     },
     "extra": {
@@ -32,6 +35,15 @@
         "projectId": "ed8f19d9-c02b-4ce1-a455-cdf69938ec78"
       }
     },
-    "owner": "fleurynov"
+    "owner": "fleurynov",
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ]
   }
 }
