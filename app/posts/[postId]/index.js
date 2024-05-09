@@ -1,10 +1,7 @@
+import { Link, useLocalSearchParams } from "expo-router";
 import React from "react";
-import { StyleSheet, Pressable, View, Text } from "react-native-web";
-import { Stack } from "expo-router";
-import { Link } from "expo-router";
+import { StyleSheet, Text, View } from "react-native-web";
 import "../../../firebaseConfig";
-import { getAuth } from "firebase/auth";
-import { useLocalSearchParams } from "expo-router";
 import { getOnePostData } from "../../../get_one_post_data";
 
 export default function NewPost() {
@@ -15,6 +12,7 @@ export default function NewPost() {
     const fetchPost = async () => {
       let res = await getOnePostData(local.postId);
       setPost(res);
+      console.log("local.postId", local.postId);
     };
     fetchPost();
   }, [local.postId]);

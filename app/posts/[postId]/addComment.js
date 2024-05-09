@@ -22,13 +22,14 @@ export default function AddComment() {
   const [newComment, setNewComment] = React.useState(null);
 
   const global = useGlobalSearchParams();
-  console.log(global);
 
   React.useEffect(() => {
+    console.log("global", global);
     onAuthStateChanged(auth, (currentUser) => {
       console.log("onAuthStateChanged", currentUser);
       if (currentUser) {
         console.log("currentUser", currentUser);
+
         setUser(currentUser);
       } else {
         console.log(null);
@@ -49,15 +50,15 @@ export default function AddComment() {
       {user ? (
         <View style={styles.container}>
           <Text style={styles.title}>Write your comment</Text>
-          <TextInput
+          {/* <TextInput
             style={styles.textInput}
             onChangeText={(e) => setNewComment(e)}
             value={newComment}
-          />
+          /> */}
 
-          <Link style={styles.link} onPress={() => validatePost()} href="/">
+          {/* <Link style={styles.link} onPress={() => validatePost()} href="/">
             Add a comment
-          </Link>
+          </Link> */}
           {/* <Button title="Ajouter un post" onPress={() => validatePost()} /> */}
         </View>
       ) : (

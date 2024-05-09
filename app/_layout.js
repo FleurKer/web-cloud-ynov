@@ -1,15 +1,26 @@
+import { Link, router, Stack } from "expo-router";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import React from "react";
-import { StyleSheet, Pressable, View, Text } from "react-native-web";
-import { Stack } from "expo-router";
-import { Link } from "expo-router";
+import { Pressable, StyleSheet, Text, View } from "react-native-web";
 import "../firebaseConfig";
-import { getAuth } from "firebase/auth";
 
 export default function Layout() {
   const auth = getAuth();
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(true);
+      } else {
+        setUser(false);
+      }
+    });
+  }, [user]);
 
   const logout = async () => {
     await auth.signOut();
+    router.navigate("/signin");
     console.log("User signed out");
   };
 
@@ -20,26 +31,42 @@ export default function Layout() {
           Home
         </Link>
       </Pressable>
-      <Pressable style={styles.linkContainer}>
-        <Link style={styles.link} href="/signin">
-          Connexion
-        </Link>
-      </Pressable>
-      <Pressable style={styles.linkContainer}>
-        <Link style={styles.link} href="/signup">
-          Inscription
-        </Link>
-      </Pressable>
+      {user ? (
+        ""
+      ) : (
+        <Pressable style={styles.linkContainer}>
+          <Link style={styles.link} href="/signup">
+            Inscription
+          </Link>
+        </Pressable>
+      )}
+      {user ? (
+        ""
+      ) : (
+        <Pressable style={styles.linkContainer}>
+          <Link style={styles.link} href="/signin">
+            Connexion
+          </Link>
+        </Pressable>
+      )}
+      {/* {user ? ( */}
       <Pressable style={styles.linkContainer}>
         <Link style={styles.link} href="/profile">
-          User Page
+          Profile Page
         </Link>
       </Pressable>
+      {/* ) : (
+        ""
+      )} */}
+      {/* {user ? ( */}
       <View>
         <Pressable style={styles.linkContainer} onPress={logout}>
           <Text style={styles.link}>Déconnexion</Text>
         </Pressable>
       </View>
+      {/* // ) : (
+      //   ""
+      // )} */}
       <Stack />
     </>
   );
