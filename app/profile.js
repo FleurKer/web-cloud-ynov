@@ -29,11 +29,10 @@ export default function User() {
     auth.currentUser?.photoURL ? auth.currentUser.photoURL : null
   );
 
-  const uid = user.uid;
-
   React.useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
+        const uid = currentUser.uid;
         setUser(currentUser);
       } else {
         console.log("User is signed out");

@@ -30,7 +30,7 @@ export default function Signin() {
     if (checkEmail(email) && checkPassword(password)) {
       signin(email, password);
       console.log("Signin success");
-      // router.replace("/profile");
+      router.replace("/profile");
       // testToast();
     } else {
       console.log("Signin failed");
