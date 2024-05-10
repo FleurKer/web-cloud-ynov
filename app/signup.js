@@ -24,7 +24,7 @@ export default function Signup() {
     if (checkEmail(email) && checkPassword(password)) {
       signup(email, password);
       console.log("Signup success");
-      router.replace("/profile");
+      // router.replace("/profile");
       // testToast();
     } else {
       console.log("Signup failed");

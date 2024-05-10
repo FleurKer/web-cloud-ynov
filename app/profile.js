@@ -13,6 +13,7 @@ import {
 import { updateUserPhotoUrl } from "../auth_update_photo_url";
 import "../firebaseConfig";
 import { uploadToFirebase } from "../storage_upload_file";
+import { set } from "firebase/database";
 // import { updateDisplayName } from "../auth_update_username";
 
 export default function User() {
@@ -24,13 +25,15 @@ export default function User() {
       ? auth.currentUser.displayName
       : "not specified"
   );
-  const [image, setImage] = React.useState(null);
+  const [image, setImage] = React.useState(
+    auth.currentUser?.photoURL ? auth.currentUser.photoURL : null
+  );
+
+  const uid = user.uid;
 
   React.useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        console.log("currentUser", currentUser);
-        const uid = user.uid;
         setUser(currentUser);
       } else {
         console.log("User is signed out");
@@ -54,8 +57,11 @@ export default function User() {
       const fileName = uri.split("/").pop();
       const uploadResp = await uploadToFirebase(uri, fileName);
       let res = await updateUserPhotoUrl(uploadResp);
+      updateProfile(auth.currentUser, { photoURL: uploadResp });
+
       if (res) {
         console.log(res);
+
         setUser({ ...user, photoURL: uploadResp });
       } else {
         console.log("Error");
@@ -90,19 +96,20 @@ export default function User() {
             ></Button>
           </View>
           <Text style={styles.text}>Profile picture :</Text>
-          <Image
-            style={styles.image}
-            source={{
-              uri: auth.currentUser?.photoURL,
-            }}
-          />
+          {user.photoURL ? (
+            <Image
+              style={styles.image}
+              source={{
+                uri: user.photoURL,
+              }}
+            />
+          ) : null}
           <View style={styles.buttonContainer}>
             <Button
               title="Pick an image from camera roll"
               onPress={pickImage}
             />
           </View>
-          {image && <Image source={{ uri: image }} style={styles.image} />}
         </View>
       ) : (
         <View style={styles.container}>
