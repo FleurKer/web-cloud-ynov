@@ -26,7 +26,7 @@ export default function Signin() {
     return emailRegex.test(email);
   };
 
-  handleSignup = (email, password) => {
+  handleSignin = (email, password) => {
     if (checkEmail(email) && checkPassword(password)) {
       signup(email, password);
       console.log("Signin success");
@@ -58,7 +58,7 @@ export default function Signin() {
       <View style={styles.buttonContainer}>
         <Button
           title="Sign up"
-          onPress={() => handleSignup(email, password)}
+          onPress={() => handleSignin(email, password)}
         ></Button>
       </View>
       <Text style={styles.subtitle}>Connect with GitHub</Text>

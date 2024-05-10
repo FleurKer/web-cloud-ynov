@@ -1,69 +1,88 @@
-// import { collection, query, where, getDocs } from "firebase/firestore";
-
-// const q = query(collection(db, "cities"), where("capital", "==", true));
-
-// const querySnapshot = await getDocs(q);
-// querySnapshot.forEach((doc) => {
-//   // doc.data() is never undefined for query doc snapshots
-//   console.log(doc.id, " => ", doc.data());
-// });
-
-import React from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
-import "../../../firebaseConfig";
+import { router, useGlobalSearchParams } from "expo-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { createComment } from "../../../create_comment_data";
-import { Link } from "expo-router";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import React from "react";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { addCommentData } from "../../../add_comment_data";
+import "../../../firebaseConfig";
+import { db } from "../../../firebaseConfig";
+import { getOnePostData } from "../../../get_one_post_data";
 
-export default function AddComment() {
+export default async function AddComment() {
   const auth = getAuth();
 
   const [user, setUser] = React.useState(null);
-  const [newComment, setNewComment] = React.useState(null);
+  const [newComment, setNewComment] = React.useState([]);
+  const [comments, setComments] = React.useState([]);
 
   const global = useGlobalSearchParams();
 
   React.useEffect(() => {
-    console.log("global", global);
-    onAuthStateChanged(auth, (currentUser) => {
-      console.log("onAuthStateChanged", currentUser);
-      if (currentUser) {
-        console.log("currentUser", currentUser);
+    const fetchUser = () => {
+      onAuthStateChanged(auth, (currentUser) => {
+        if (currentUser) {
+          setUser(currentUser);
+          console.log("connected", currentUser.uid);
+        } else {
+          console.log(null);
+          setUser(null);
+        }
 
-        setUser(currentUser);
-      } else {
-        console.log(null);
-        setUser(null);
-      }
-    });
-  }, []);
+        const fetchPost = async () => {
+          let res = await getOnePostData(global.postId);
+          setPost(res);
+        };
+        fetchPost();
+      });
+    };
+    fetchUser();
+
+    const fetchPosts = async () => {
+      const q = query(
+        collection(db, "posts"),
+        where("id", "==", global.postId)
+      );
+      const querySnapshot = await getDocs(q);
+      const fetchedComments = [];
+      querySnapshot.forEach((doc) => {
+        fetchedComments.push({ id: doc.id, data: doc.data() });
+      });
+      setComments(fetchedComments);
+    };
+
+    fetchPosts();
+  }, [auth, global.postId]);
 
   const validatePost = () => {
-    if (newComment) {
-      createComment(newComment, user.uid, postId);
-      //retourner à la page d'accueil
+    if (newComment && user) {
+      addCommentData(newComment, global.postId, user.uid);
+      setComments([...comments, newComment]);
+      // Retourner à la page du post
+      router.navigate(`/posts/${global.postId}`);
     }
   };
 
   return (
     <>
-      {user ? (
-        <View style={styles.container}>
-          <Text style={styles.title}>Write your comment</Text>
-          {/* <TextInput
-            style={styles.textInput}
-            onChangeText={(e) => setNewComment(e)}
-            value={newComment}
-          /> */}
-
-          {/* <Link style={styles.link} onPress={() => validatePost()} href="/">
-            Add a comment
-          </Link> */}
-          {/* <Button title="Ajouter un post" onPress={() => validatePost()} /> */}
+      {/* {user ? ( */}
+      <View style={styles.container}>
+        <Text style={styles.title}>Write your comment</Text>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(e) => setNewComment(e)}
+          value={newComment}
+        />
+        <View style={styles.buttonContainer}>
+          <Button title="Ajouter un post" onPress={() => validatePost()} />
         </View>
-      ) : (
+        <Text style={styles.title}>Comments</Text>
+        {comments.map((comment, index) => (
+          <Text key={index}>{comment[index]}</Text>
+        ))}
+      </View>
+      {/* ) : (
         <Text style={styles.text}>Thanks to connect</Text>
-      )}
+      )} */}
     </>
   );
 }

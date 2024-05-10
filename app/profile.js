@@ -2,10 +2,18 @@ import * as ImagePicker from "expo-image-picker";
 import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
 import React from "react";
 import { Image } from "react-native";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native-web";
+import {
+  Button,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native-web";
 import { updateUserPhotoUrl } from "../auth_update_photo_url";
 import "../firebaseConfig";
 import { uploadToFirebase } from "../storage_upload_file";
+// import { updateDisplayName } from "../auth_update_username";
 
 export default function User() {
   const auth = getAuth();
@@ -58,14 +66,15 @@ export default function User() {
   const handleDisplayName = (displayName) => {
     setDisplayName(displayName);
     updateProfile(auth.currentUser, { displayName: displayName });
+    // updateDisplayName(displayName);
   };
 
   return (
-    <>
+    <ScrollView>
       <Text style={styles.title}>Profile Page</Text>
       {/* {user ? ( */}
       <View style={styles.container}>
-        <Text>Display name : </Text>
+        <Text style={styles.text}>Display name : </Text>
         <TextInput
           style={styles.textInput}
           placeholder={user ? user.displayName : "No display name"}
@@ -78,14 +87,16 @@ export default function User() {
             onPress={() => handleDisplayName(displayName)}
           ></Button>
         </View>
-        <Text>Profile picture :</Text>
+        <Text style={styles.text}>Profile picture :</Text>
         <Image
           style={styles.image}
           source={{
             uri: auth.currentUser?.photoURL,
           }}
         />
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
+        <View style={styles.buttonContainer}>
+          <Button title="Pick an image from camera roll" onPress={pickImage} />
+        </View>
         {image && <Image source={{ uri: image }} style={styles.image} />}
       </View>
       {/* ) : (
@@ -93,16 +104,15 @@ export default function User() {
           <Text>User not logged ... </Text>
         </View>
       )} */}
-    </>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#fff",
   },
   textInput: {
     borderWidth: 1,
@@ -113,11 +123,28 @@ const styles = StyleSheet.create({
     marginRight: "40%",
     marginLeft: "40%",
   },
+  text: {
+    marginTop: 5,
+    marginBottom: 10,
+    textAlign: "center",
+  },
   buttonContainer: {
     padding: 15,
     marginBottom: 10,
     textAlign: "center",
     marginRight: "40%",
     marginLeft: "40%",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
   },
 });

@@ -1,9 +1,9 @@
-import React from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
-import "../firebaseConfig";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { createPost } from "../add_post_data";
 import { Link } from "expo-router";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import React from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import { createPost } from "../add_post_data";
+import "../firebaseConfig";
 
 export default function AddPost() {
   const auth = getAuth();
@@ -28,37 +28,33 @@ export default function AddPost() {
   const validatePost = () => {
     if (title && text) {
       createPost(title, text, user.uid);
-      //retourner à la page d'accueil
     }
   };
 
   return (
     <>
-      {user ? (
-        <View style={styles.container}>
-          <Text style={styles.title}>Add a comment</Text>
-          <Text style={styles.text}>Title</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(e) => setTitle(e)}
-            // onChangeText={text => onChangeText(text)}
-            value={title}
-          />
-          <Text style={styles.text}>Text</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(e) => setText(e)}
-            // onChangeText={text => onChangeText(text)}
-            value={text}
-          />
-          <Link style={styles.link} onPress={() => validatePost()} href="/">
-            Ajouter un post
-          </Link>
-          {/* <Button title="Ajouter un post" onPress={() => validatePost()} /> */}
-        </View>
-      ) : (
+      {/* {user ? ( */}
+      <View style={styles.container}>
+        <Text style={styles.title}>Add a comment</Text>
+        <Text style={styles.text}>Title</Text>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(e) => setTitle(e)}
+          value={title}
+        />
+        <Text style={styles.text}>Text</Text>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(e) => setText(e)}
+          value={text}
+        />
+        <Link style={styles.link} onPress={() => validatePost()} href="/">
+          Ajouter un post
+        </Link>
+      </View>
+      {/* ) : (
         <Text style={styles.text}>Thanks to connect</Text>
-      )}
+      )} */}
     </>
   );
 }
