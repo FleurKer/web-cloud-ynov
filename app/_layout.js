@@ -16,7 +16,7 @@ export default function Layout() {
         setUser(false);
       }
     });
-  }, [user]);
+  }, []);
 
   const logout = async () => {
     await auth.signOut();
@@ -49,24 +49,24 @@ export default function Layout() {
           </Link>
         </Pressable>
       )}
-      {/* {user ? ( */}
-      <Pressable style={styles.linkContainer}>
-        <Link style={styles.link} href="/profile">
-          Profile Page
-        </Link>
-      </Pressable>
-      {/* ) : (
-        ""
-      )} */}
-      {/* {user ? ( */}
-      <View>
-        <Pressable style={styles.linkContainer} onPress={logout}>
-          <Text style={styles.link}>Déconnexion</Text>
+      {user ? (
+        <Pressable style={styles.linkContainer}>
+          <Link style={styles.link} href="/profile">
+            Profile Page
+          </Link>
         </Pressable>
-      </View>
-      {/* // ) : (
-      //   ""
-      // )} */}
+      ) : (
+        ""
+      )}
+      {user ? (
+        <View>
+          <Pressable style={styles.linkContainer} onPress={logout}>
+            <Text style={styles.link}>Déconnexion</Text>
+          </Pressable>
+        </View>
+      ) : (
+        ""
+      )}
       <Stack />
     </>
   );

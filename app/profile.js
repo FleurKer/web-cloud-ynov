@@ -67,43 +67,48 @@ export default function User() {
     setDisplayName(displayName);
     updateProfile(auth.currentUser, { displayName: displayName });
     // updateDisplayName(displayName);
+
+    setUser({ ...user, displayName: displayName });
   };
 
   return (
     <ScrollView>
       <Text style={styles.title}>Profile Page</Text>
-      {/* {user ? ( */}
-      <View style={styles.container}>
-        <Text style={styles.text}>Display name : </Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder={user ? user.displayName : "No display name"}
-          onChangeText={(text) => setDisplayName(text)}
-          value={displayName}
-        ></TextInput>
-        <View style={styles.buttonContainer}>
-          <Button
-            title="change display name"
-            onPress={() => handleDisplayName(displayName)}
-          ></Button>
+      {user ? (
+        <View style={styles.container}>
+          <Text style={styles.text}>Display name : </Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder={user ? user.displayName : "No display name"}
+            onChangeText={(text) => setDisplayName(text)}
+            value={displayName}
+          ></TextInput>
+          <View style={styles.buttonContainer}>
+            <Button
+              title="change display name"
+              onPress={() => handleDisplayName(displayName)}
+            ></Button>
+          </View>
+          <Text style={styles.text}>Profile picture :</Text>
+          <Image
+            style={styles.image}
+            source={{
+              uri: auth.currentUser?.photoURL,
+            }}
+          />
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Pick an image from camera roll"
+              onPress={pickImage}
+            />
+          </View>
+          {image && <Image source={{ uri: image }} style={styles.image} />}
         </View>
-        <Text style={styles.text}>Profile picture :</Text>
-        <Image
-          style={styles.image}
-          source={{
-            uri: auth.currentUser?.photoURL,
-          }}
-        />
-        <View style={styles.buttonContainer}>
-          <Button title="Pick an image from camera roll" onPress={pickImage} />
-        </View>
-        {image && <Image source={{ uri: image }} style={styles.image} />}
-      </View>
-      {/* ) : (
+      ) : (
         <View style={styles.container}>
           <Text>User not logged ... </Text>
         </View>
-      )} */}
+      )}
     </ScrollView>
   );
 }

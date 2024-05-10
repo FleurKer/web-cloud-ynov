@@ -5,7 +5,7 @@ import { ScrollView } from "react-native-web";
 import { signinWithGithub } from "../auth_github_signin_popup";
 import { loginWithPhoneNumber } from "../auth_phone_signin";
 import { verifyCode } from "../auth_phone_verify_code";
-import { signup } from "../auth_signup_password";
+import { signin } from "../auth_signin_password";
 
 export default function Signin() {
   const [email, onChangeEmail] = React.useState("");
@@ -28,7 +28,7 @@ export default function Signin() {
 
   handleSignin = (email, password) => {
     if (checkEmail(email) && checkPassword(password)) {
-      signup(email, password);
+      signin(email, password);
       console.log("Signin success");
       router.replace("/profile");
       // testToast();
@@ -57,7 +57,7 @@ export default function Signin() {
       ></TextInput>
       <View style={styles.buttonContainer}>
         <Button
-          title="Sign up"
+          title="Sign in"
           onPress={() => handleSignin(email, password)}
         ></Button>
       </View>

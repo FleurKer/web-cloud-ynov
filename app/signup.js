@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import React from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native-web";
-import { signin } from "../auth_signin_password";
+import { signup } from "../auth_signup_password";
 
 export default function Signup() {
   const [email, onChangeEmail] = React.useState("");
@@ -22,7 +22,7 @@ export default function Signup() {
 
   const handleSignup = (email, password) => {
     if (checkEmail(email) && checkPassword(password)) {
-      signin(email, password);
+      signup(email, password);
       console.log("Signup success");
       router.replace("/profile");
       // testToast();
@@ -50,7 +50,7 @@ export default function Signup() {
       ></TextInput>
       <View style={styles.buttonContainer}>
         <Button
-          title="Sign in"
+          title="Sign up"
           onPress={() => handleSignup(email, password)}
         ></Button>
       </View>
